@@ -1,0 +1,7 @@
+# Holds the projects deps.
+/node_modules
+
+# Holds secrets informations.
+/.env
+
+/tsdemo.ts

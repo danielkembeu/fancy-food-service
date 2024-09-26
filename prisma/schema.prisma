@@ -1,0 +1,128 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Session {
+  MORNING
+  AFTERNOON
+  EVENING
+}
+
+enum PaymentMethod {
+  CREDIT_CARD
+  MOMO
+  OM
+  CASH
+}
+
+enum OrderStatus {
+  COMPLETED
+  PENDING
+  CANCELLED
+}
+
+// ============================== Models =======================================
+
+model Customer {
+  id       String  @id @default(uuid())
+  fullname String
+  email    String  @unique
+  address  String
+  phone    String
+  password String
+  order    Order[]
+}
+
+model DrinkCategory {
+  id                 String  @id @default(uuid())
+  drinkCategoryLabel String
+  drinkCategoryCount String
+  drink              Drink[]
+}
+
+model FoodCategory {
+  id                String @id @default(uuid())
+  foodCategoryLabel String
+  foodCategoryCount String
+  food              Food[]
+}
+
+model Food {
+  id             String       @id @default(uuid())
+  name           String
+  description    String
+  price          Float
+  available      Boolean
+  foodCategory   FoodCategory @relation(fields: [foodCategoryId], references: [id])
+  foodCategoryId String
+  images         Image[]
+  menu           Menu[]
+}
+
+model Drink {
+  id              String        @id @default(uuid())
+  name            String
+  description     String
+  price           Float
+  available       Boolean
+  drinkCategory   DrinkCategory @relation(fields: [drinkCategoryId], references: [id])
+  drinkCategoryId String
+  images          Image[]
+  Menu            Menu[]
+}
+
+model Menu {
+  id         String   @id @default(uuid())
+  drink      Drink    @relation(fields: [drinkId], references: [id])
+  drinkId    String
+  food       Food     @relation(fields: [foodId], references: [id])
+  foodId     String
+  createdAt  DateTime @default(now())
+  deliveryAt DateTime
+  discount   Float
+  totalPrice Float
+  Order      Order[]
+}
+
+model Image {
+  id      String @id @default(uuid())
+  url     String
+  food    Food   @relation(fields: [foodId], references: [id])
+  foodId  String
+  drink   Drink  @relation(fields: [drinkId], references: [id])
+  drinkId String
+}
+
+model Worker {
+  id             String  @id @default(uuid())
+  fullname       String
+  phone          String
+  profilePicture String
+  email          String
+  customerReview Float?
+  order          Order[]
+}
+
+model Order {
+  id               String        @id @default(uuid())
+  menu             Menu          @relation(fields: [menuId], references: [id])
+  menuId           String
+  customer         Customer      @relation(fields: [customerId], references: [id])
+  customerId       String
+  worker           Worker        @relation(fields: [workerId], references: [id])
+  workerId         String
+  paymentMethod    PaymentMethod
+  menuReview       Float?
+  deliveryLocation String?
+}

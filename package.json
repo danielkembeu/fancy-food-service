@@ -1,0 +1,28 @@
+{
+  "name": "fancy-food",
+  "version": "1.0.0",
+  "description": "A backend service for a restaurant",
+  "main": "./src/server.ts",
+  "scripts": {
+    "start": "nodemon ./src/server.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/danielkembeu/fancy-food-service"
+  },
+  "author": "Daniel",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^5.20.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "dotenv": "^16.4.5",
+    "nodemon": "^3.1.7",
+    "prisma": "^5.20.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.2"
+  }
+}
